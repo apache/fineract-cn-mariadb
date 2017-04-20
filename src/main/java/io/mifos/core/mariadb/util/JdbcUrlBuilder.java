@@ -52,8 +52,7 @@ public final class JdbcUrlBuilder {
         return this.type.prefix()
             + this.host + ":"
             + this.port
-            + (this.instanceName != null ? "/" + this.instanceName : "")
-            + "?useServerPrepStmts=false";
+            + (this.instanceName != null ? "/" + this.instanceName : "");
       default:
         throw new IllegalArgumentException("Unknown database type '" + this.type.name() + "'");
     }
