@@ -107,6 +107,10 @@ public class MariaDBJavaConfiguration {
     boneCPDataSource.setStatementsCacheSize(
         Integer.valueOf(this.env.getProperty(MariaDBConstants.BONECP_STATEMENT_CACHE_PROP, MariaDBConstants.BONECP_STATEMENT_CACHE_DEFAULT)));
 
+    final Properties driverProperties = new Properties();
+    driverProperties.setProperty("useServerPrepStmts", "false");
+    boneCPDataSource.setDriverProperties(driverProperties);
+
     final ContextAwareRoutingDataSource dataSource = new ContextAwareRoutingDataSource(logger, JdbcUrlBuilder.DatabaseType.MARIADB);
     dataSource.setMetaDataSource(boneCPDataSource);
     final HashMap<Object, Object> targetDataSources = new HashMap<>();
