@@ -47,19 +47,29 @@ public final class JdbcUrlBuilder {
   }
 
   public String build() {
+    final String[] hostList = this.host.split(",");
     switch (this.type) {
       case MARIADB:
-        return this.type.prefix()
-            + this.host + ":"
-            + this.port
-            + (this.instanceName != null ? "/" + this.instanceName : "");
+        final StringBuilder jdbcUrl = new StringBuilder();
+        final String jdbcProtocol = this.type.prefix() + (hostList.length > 1 ? "replication://" : "//");
+        jdbcUrl.append(jdbcProtocol);
+        for (int i = 0; i < hostList.length; i++) {
+          jdbcUrl.append(hostList[i].trim()).append(":").append(this.port);
+          if ((i + 1) < hostList.length) {
+            jdbcUrl.append(",");
+          }
+        }
+        if (this.instanceName != null) {
+          jdbcUrl.append("/").append(this.instanceName);
+        }
+        return jdbcUrl.toString();
       default:
         throw new IllegalArgumentException("Unknown database type '" + this.type.name() + "'");
     }
   }
 
   public enum DatabaseType {
-    MARIADB("jdbc:mariadb://");
+    MARIADB("jdbc:mariadb:");
 
     private final String prefix;
 
