@@ -65,8 +65,8 @@ public final class ContextAwareRoutingDataSource extends AbstractRoutingDataSour
     final String currentLookupKey = this.determineCurrentLookupKey().toString();
 
     this.dynamicDataSources.computeIfAbsent(currentLookupKey, (key) -> {
-      this.logger.info("Creating new dynamic data source for {}.", currentLookupKey);
-      final Tenant tenant = new Tenant(currentLookupKey);
+      this.logger.info("Creating new dynamic data source for {}.", key);
+      final Tenant tenant = new Tenant(key);
       this.readAdditionalTenantInformation(tenant);
       final BoneCPDataSource tenantDataSource = new BoneCPDataSource();
       tenantDataSource.setDriverClass(tenant.getDriverClass());
