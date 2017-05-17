@@ -59,6 +59,10 @@ dependencies {
     )
 }
 
+jar {
+    from sourceSets.main.allSource
+}
+
 publishing {
     publications {
         mariadbPublication(MavenPublication) {

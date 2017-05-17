@@ -15,21 +15,22 @@
  */
 package io.mifos.core.mariadb.config;
 
-import org.springframework.context.annotation.Import;
 
-import java.lang.annotation.Documented;
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Inherited;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 
-@SuppressWarnings({"WeakerAccess", "unused"})
-@Target(ElementType.TYPE)
-@Retention(RetentionPolicy.RUNTIME)
-@Documented
-@Inherited
-@Import({MariaDBJavaConfigurationImportSelector.class})
-public @interface EnableMariaDB {
-  boolean forTenantContext() default true;
+import javax.sql.DataSource;
+
+/**
+ * @author Myrle Krantz
+ */
+@SuppressWarnings("WeakerAccess")
+@Configuration
+@ConditionalOnProperty(prefix = "mariadb", name = "enabled", matchIfMissing = true)
+public class MariaDBTenantFreeJavaConfiguration {
+  @Bean
+  public DataSource dataSource(final MetaDataSourceWrapper metaDataSource) {
+    return metaDataSource.getMetaDataSource();
+  }
 }

@@ -15,21 +15,19 @@
  */
 package io.mifos.core.mariadb.config;
 
-import org.springframework.context.annotation.Import;
+import com.jolbox.bonecp.BoneCPDataSource;
 
-import java.lang.annotation.Documented;
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Inherited;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+/**
+ * @author Myrle Krantz
+ */
+public class MetaDataSourceWrapper {
+  private final BoneCPDataSource metaDataSource;
 
-@SuppressWarnings({"WeakerAccess", "unused"})
-@Target(ElementType.TYPE)
-@Retention(RetentionPolicy.RUNTIME)
-@Documented
-@Inherited
-@Import({MariaDBJavaConfigurationImportSelector.class})
-public @interface EnableMariaDB {
-  boolean forTenantContext() default true;
+  public MetaDataSourceWrapper(final BoneCPDataSource metaDataSource) {
+    this.metaDataSource = metaDataSource;
+  }
+
+  BoneCPDataSource getMetaDataSource() {
+    return metaDataSource;
+  }
 }
