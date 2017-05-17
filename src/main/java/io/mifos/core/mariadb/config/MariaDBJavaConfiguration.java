@@ -15,17 +15,16 @@
  */
 package io.mifos.core.mariadb.config;
 
+
 import com.jolbox.bonecp.BoneCPDataSource;
 import io.mifos.core.lang.ApplicationName;
 import io.mifos.core.lang.config.EnableApplicationName;
-import io.mifos.core.mariadb.domain.ContextAwareRoutingDataSource;
 import io.mifos.core.mariadb.domain.FlywayFactoryBean;
 import io.mifos.core.mariadb.util.JdbcUrlBuilder;
 import io.mifos.core.mariadb.util.MariaDBConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -40,7 +39,6 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
-import java.util.HashMap;
 import java.util.Properties;
 
 @SuppressWarnings("WeakerAccess")
@@ -78,47 +76,6 @@ public class MariaDBJavaConfiguration {
   }
 
   @Bean
-  public DataSource dataSource(@Qualifier(MariaDBConstants.LOGGER_NAME) final Logger logger) {
-    final BoneCPDataSource boneCPDataSource = new BoneCPDataSource();
-    boneCPDataSource.setDriverClass(
-        this.env.getProperty(MariaDBConstants.MARIADB_DRIVER_CLASS_PROP, MariaDBConstants.MARIADB_DRIVER_CLASS_DEFAULT));
-    boneCPDataSource.setJdbcUrl(JdbcUrlBuilder
-        .create(JdbcUrlBuilder.DatabaseType.MARIADB)
-        .host(this.env.getProperty(MariaDBConstants.MARIADB_HOST_PROP, MariaDBConstants.MARIADB_HOST_DEFAULT))
-        .port(this.env.getProperty(MariaDBConstants.MARIADB_PORT_PROP, MariaDBConstants.MARIADB_PORT_DEFAULT))
-        .instanceName(this.env.getProperty(MariaDBConstants.MARIADB_DATABASE_NAME_PROP, MariaDBConstants.MARIADB_DATABASE_NAME_DEFAULT))
-        .build());
-    boneCPDataSource.setUsername(
-        this.env.getProperty(MariaDBConstants.MARIADB_USER_PROP, MariaDBConstants.MARIADB_USER_DEFAULT));
-    boneCPDataSource.setPassword(
-        this.env.getProperty(MariaDBConstants.MARIADB_PASSWORD_PROP, MariaDBConstants.MARIADB_PASSWORD_DEFAULT));
-    boneCPDataSource.setIdleConnectionTestPeriodInMinutes(
-        Long.valueOf(this.env.getProperty(MariaDBConstants.BONECP_IDLE_CONNECTION_TEST_PROP, MariaDBConstants.BONECP_IDLE_CONNECTION_TEST_DEFAULT)));
-    boneCPDataSource.setIdleMaxAgeInMinutes(
-        Long.valueOf(this.env.getProperty(MariaDBConstants.BONECP_IDLE_MAX_AGE_PROP, MariaDBConstants.BONECP_IDLE_MAX_AGE_DEFAULT)));
-    boneCPDataSource.setMaxConnectionsPerPartition(
-        Integer.valueOf(this.env.getProperty(MariaDBConstants.BONECP_MAX_CONNECTION_PARTITION_PROP, MariaDBConstants.BONECP_MAX_CONNECTION_PARTITION_DEFAULT)));
-    boneCPDataSource.setMinConnectionsPerPartition(
-        Integer.valueOf(this.env.getProperty(MariaDBConstants.BONECP_MIN_CONNECTION_PARTITION_PROP, MariaDBConstants.BONECP_MIN_CONNECTION_PARTITION_DEFAULT)));
-    boneCPDataSource.setPartitionCount(
-        Integer.valueOf(this.env.getProperty(MariaDBConstants.BONECP_PARTITION_COUNT_PROP, MariaDBConstants.BONECP_PARTITION_COUNT_DEFAULT)));
-    boneCPDataSource.setAcquireIncrement(
-        Integer.valueOf(this.env.getProperty(MariaDBConstants.BONECP_ACQUIRE_INCREMENT_PROP, MariaDBConstants.BONECP_ACQUIRE_INCREMENT_DEFAULT)));
-    boneCPDataSource.setStatementsCacheSize(
-        Integer.valueOf(this.env.getProperty(MariaDBConstants.BONECP_STATEMENT_CACHE_PROP, MariaDBConstants.BONECP_STATEMENT_CACHE_DEFAULT)));
-
-    final Properties driverProperties = new Properties();
-    driverProperties.setProperty("useServerPrepStmts", "false");
-    boneCPDataSource.setDriverProperties(driverProperties);
-
-    final ContextAwareRoutingDataSource dataSource = new ContextAwareRoutingDataSource(logger, JdbcUrlBuilder.DatabaseType.MARIADB);
-    dataSource.setMetaDataSource(boneCPDataSource);
-    final HashMap<Object, Object> targetDataSources = new HashMap<>();
-    dataSource.setTargetDataSources(targetDataSources);
-    return dataSource;
-  }
-
-  @Bean
   public PlatformTransactionManager transactionManager(EntityManagerFactory emf) {
     final JpaTransactionManager transactionManager = new JpaTransactionManager();
     transactionManager.setEntityManagerFactory(emf);
@@ -133,6 +90,43 @@ public class MariaDBJavaConfiguration {
   @Bean
   public FlywayFactoryBean flywayFactoryBean(final ApplicationName applicationName) {
     return new FlywayFactoryBean(applicationName);
+  }
+
+  @Bean
+  public MetaDataSourceWrapper metaDataSourceWrapper() {
+
+    final BoneCPDataSource boneCPDataSource = new BoneCPDataSource();
+    boneCPDataSource.setDriverClass(
+            this.env.getProperty(MariaDBConstants.MARIADB_DRIVER_CLASS_PROP, MariaDBConstants.MARIADB_DRIVER_CLASS_DEFAULT));
+    boneCPDataSource.setJdbcUrl(JdbcUrlBuilder
+            .create(JdbcUrlBuilder.DatabaseType.MARIADB)
+            .host(this.env.getProperty(MariaDBConstants.MARIADB_HOST_PROP, MariaDBConstants.MARIADB_HOST_DEFAULT))
+            .port(this.env.getProperty(MariaDBConstants.MARIADB_PORT_PROP, MariaDBConstants.MARIADB_PORT_DEFAULT))
+            .instanceName(this.env.getProperty(MariaDBConstants.MARIADB_DATABASE_NAME_PROP, MariaDBConstants.MARIADB_DATABASE_NAME_DEFAULT))
+            .build());
+    boneCPDataSource.setUsername(
+            this.env.getProperty(MariaDBConstants.MARIADB_USER_PROP, MariaDBConstants.MARIADB_USER_DEFAULT));
+    boneCPDataSource.setPassword(
+            this.env.getProperty(MariaDBConstants.MARIADB_PASSWORD_PROP, MariaDBConstants.MARIADB_PASSWORD_DEFAULT));
+    boneCPDataSource.setIdleConnectionTestPeriodInMinutes(
+            Long.valueOf(this.env.getProperty(MariaDBConstants.BONECP_IDLE_CONNECTION_TEST_PROP, MariaDBConstants.BONECP_IDLE_CONNECTION_TEST_DEFAULT)));
+    boneCPDataSource.setIdleMaxAgeInMinutes(
+            Long.valueOf(this.env.getProperty(MariaDBConstants.BONECP_IDLE_MAX_AGE_PROP, MariaDBConstants.BONECP_IDLE_MAX_AGE_DEFAULT)));
+    boneCPDataSource.setMaxConnectionsPerPartition(
+            Integer.valueOf(this.env.getProperty(MariaDBConstants.BONECP_MAX_CONNECTION_PARTITION_PROP, MariaDBConstants.BONECP_MAX_CONNECTION_PARTITION_DEFAULT)));
+    boneCPDataSource.setMinConnectionsPerPartition(
+            Integer.valueOf(this.env.getProperty(MariaDBConstants.BONECP_MIN_CONNECTION_PARTITION_PROP, MariaDBConstants.BONECP_MIN_CONNECTION_PARTITION_DEFAULT)));
+    boneCPDataSource.setPartitionCount(
+            Integer.valueOf(this.env.getProperty(MariaDBConstants.BONECP_PARTITION_COUNT_PROP, MariaDBConstants.BONECP_PARTITION_COUNT_DEFAULT)));
+    boneCPDataSource.setAcquireIncrement(
+            Integer.valueOf(this.env.getProperty(MariaDBConstants.BONECP_ACQUIRE_INCREMENT_PROP, MariaDBConstants.BONECP_ACQUIRE_INCREMENT_DEFAULT)));
+    boneCPDataSource.setStatementsCacheSize(
+            Integer.valueOf(this.env.getProperty(MariaDBConstants.BONECP_STATEMENT_CACHE_PROP, MariaDBConstants.BONECP_STATEMENT_CACHE_DEFAULT)));
+
+    final Properties driverProperties = new Properties();
+    driverProperties.setProperty("useServerPrepStmts", "false");
+    boneCPDataSource.setDriverProperties(driverProperties);
+    return new MetaDataSourceWrapper(boneCPDataSource);
   }
 
   private Properties additionalProperties() {
