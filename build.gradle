@@ -8,7 +8,7 @@ plugins {
     id 'com.github.hierynomus.license' version '0.13.1'
 }
 
-group 'io.mifos.core'
+group 'org.apache.fineract.cn'
 version '0.1.0-BUILD-SNAPSHOT'
 
 ext.versions = [
@@ -38,7 +38,7 @@ dependencies {
     compile(
             [group: 'org.springframework', name: 'spring-context', version: versions.springcontext],
             [group: 'com.google.code.findbugs', name: 'jsr305', version: versions.findbugs],
-            [group: 'io.mifos.core', name: 'lang', version: versions.frameworklang],
+            [group: 'org.apache.fineract.cn', name: 'lang', version: versions.frameworklang],
             [group: 'org.springframework.boot', name: 'spring-boot-starter-data-jpa', version: versions.springboot],
             [group: 'com.jolbox', name: 'bonecp', version: '0.8.0.RELEASE'],
             [group: 'org.flywaydb', name: 'flyway-core', version: '4.0.1']
