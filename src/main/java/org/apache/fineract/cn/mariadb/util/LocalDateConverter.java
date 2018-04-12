@@ -16,24 +16,35 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package io.mifos.core.mariadb.config;
+package org.apache.fineract.cn.mariadb.util;
 
+import javax.persistence.AttributeConverter;
+import javax.persistence.Converter;
+import java.sql.Date;
+import java.time.LocalDate;
 
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
+@Converter
+public class LocalDateConverter implements AttributeConverter<LocalDate, Date> {
 
-import javax.sql.DataSource;
+  public LocalDateConverter() {
+    super();
+  }
 
-/**
- * @author Myrle Krantz
- */
-@SuppressWarnings("WeakerAccess")
-@Configuration
-@ConditionalOnProperty(prefix = "mariadb", name = "enabled", matchIfMissing = true)
-public class MariaDBTenantFreeJavaConfiguration {
-  @Bean
-  public DataSource dataSource(final MetaDataSourceWrapper metaDataSource) {
-    return metaDataSource.getMetaDataSource();
+  @Override
+  public Date convertToDatabaseColumn(final LocalDate attribute) {
+    if (attribute == null) {
+      return null;
+    } else {
+      return Date.valueOf(attribute);
+    }
+  }
+
+  @Override
+  public LocalDate convertToEntityAttribute(final Date dbData) {
+    if (dbData == null) {
+      return null;
+    } else {
+      return dbData.toLocalDate();
+    }
   }
 }

@@ -16,32 +16,24 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package io.mifos.core.mariadb.config;
+package org.apache.fineract.cn.mariadb.config;
 
-import io.mifos.core.mariadb.domain.ContextAwareRoutingDataSource;
-import io.mifos.core.mariadb.util.JdbcUrlBuilder;
-import io.mifos.core.mariadb.util.MariaDBConstants;
-import org.slf4j.Logger;
-import org.springframework.beans.factory.annotation.Qualifier;
+
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import javax.sql.DataSource;
-import java.util.HashMap;
 
+/**
+ * @author Myrle Krantz
+ */
 @SuppressWarnings("WeakerAccess")
 @Configuration
 @ConditionalOnProperty(prefix = "mariadb", name = "enabled", matchIfMissing = true)
-public class MariaDBTenantBasedJavaConfiguration {
+public class MariaDBTenantFreeJavaConfiguration {
   @Bean
-  public DataSource dataSource(@Qualifier(MariaDBConstants.LOGGER_NAME) final Logger logger,
-                               final MetaDataSourceWrapper metaDataSource) {
-
-    final ContextAwareRoutingDataSource dataSource = new ContextAwareRoutingDataSource(logger, JdbcUrlBuilder.DatabaseType.MARIADB);
-    dataSource.setMetaDataSource(metaDataSource.getMetaDataSource());
-    final HashMap<Object, Object> targetDataSources = new HashMap<>();
-    dataSource.setTargetDataSources(targetDataSources);
-    return dataSource;
+  public DataSource dataSource(final MetaDataSourceWrapper metaDataSource) {
+    return metaDataSource.getMetaDataSource();
   }
 }

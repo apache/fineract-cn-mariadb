@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package io.mifos.core.mariadb.util;
+package org.apache.fineract.cn.mariadb.util;
 
 import org.junit.Assert;
 import org.junit.Test;
