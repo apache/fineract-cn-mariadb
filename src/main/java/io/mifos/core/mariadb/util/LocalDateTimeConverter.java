@@ -18,12 +18,12 @@
  */
 package io.mifos.core.mariadb.util;
 
-import io.mifos.core.lang.DateConverter;
 
 import javax.persistence.AttributeConverter;
 import javax.persistence.Converter;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import org.apache.fineract.cn.lang.DateConverter;
 
 @Converter
 public class LocalDateTimeConverter implements AttributeConverter<LocalDateTime, Timestamp> {

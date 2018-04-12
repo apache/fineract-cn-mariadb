@@ -20,11 +20,11 @@ package io.mifos.core.mariadb.config;
 
 
 import com.jolbox.bonecp.BoneCPDataSource;
-import io.mifos.core.lang.ApplicationName;
-import io.mifos.core.lang.config.EnableApplicationName;
 import io.mifos.core.mariadb.domain.FlywayFactoryBean;
 import io.mifos.core.mariadb.util.JdbcUrlBuilder;
 import io.mifos.core.mariadb.util.MariaDBConstants;
+import org.apache.fineract.cn.lang.ApplicationName;
+import org.apache.fineract.cn.lang.config.EnableApplicationName;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

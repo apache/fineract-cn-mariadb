@@ -18,7 +18,7 @@
  */
 package io.mifos.core.mariadb.domain;
 
-import io.mifos.core.lang.ApplicationName;
+import org.apache.fineract.cn.lang.ApplicationName;
 import org.flywaydb.core.Flyway;
 
 import javax.sql.DataSource;

@@ -19,9 +19,9 @@
 package io.mifos.core.mariadb.domain;
 
 import com.jolbox.bonecp.BoneCPDataSource;
-import io.mifos.core.lang.TenantContextHolder;
 import io.mifos.core.mariadb.util.JdbcUrlBuilder;
 import io.mifos.core.mariadb.util.MariaDBConstants;
+import org.apache.fineract.cn.lang.TenantContextHolder;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.datasource.lookup.AbstractRoutingDataSource;
