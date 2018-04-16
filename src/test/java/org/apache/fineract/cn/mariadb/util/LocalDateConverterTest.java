@@ -16,35 +16,30 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package io.mifos.core.mariadb.util;
+package org.apache.fineract.cn.mariadb.util;
 
-import javax.persistence.AttributeConverter;
-import javax.persistence.Converter;
+import org.junit.Assert;
+import org.junit.Test;
+
 import java.sql.Date;
 import java.time.LocalDate;
 
-@Converter
-public class LocalDateConverter implements AttributeConverter<LocalDate, Date> {
+public class LocalDateConverterTest {
 
-  public LocalDateConverter() {
+  public LocalDateConverterTest() {
     super();
   }
 
-  @Override
-  public Date convertToDatabaseColumn(final LocalDate attribute) {
-    if (attribute == null) {
-      return null;
-    } else {
-      return Date.valueOf(attribute);
-    }
-  }
+  @Test
+  public void shouldConvertLocalDate() {
+    final LocalDateConverter converter = new LocalDateConverter();
 
-  @Override
-  public LocalDate convertToEntityAttribute(final Date dbData) {
-    if (dbData == null) {
-      return null;
-    } else {
-      return dbData.toLocalDate();
-    }
+    final LocalDate expected = LocalDate.of(2017, 1, 1);
+
+    final Date dbDate = converter.convertToDatabaseColumn(expected);
+
+    final LocalDate result = converter.convertToEntityAttribute(dbDate);
+
+    Assert.assertEquals(expected, result);
   }
 }

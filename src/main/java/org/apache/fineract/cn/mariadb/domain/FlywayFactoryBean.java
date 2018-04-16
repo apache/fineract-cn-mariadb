@@ -16,30 +16,29 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package io.mifos.core.mariadb.util;
+package org.apache.fineract.cn.mariadb.domain;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.apache.fineract.cn.lang.ApplicationName;
+import org.flywaydb.core.Flyway;
 
-import java.sql.Date;
-import java.time.LocalDate;
+import javax.sql.DataSource;
 
-public class LocalDateConverterTest {
+public class FlywayFactoryBean {
 
-  public LocalDateConverterTest() {
+  private final ApplicationName applicationName;
+
+  public FlywayFactoryBean(final ApplicationName applicationName) {
     super();
+    this.applicationName = applicationName;
   }
 
-  @Test
-  public void shouldConvertLocalDate() {
-    final LocalDateConverter converter = new LocalDateConverter();
-
-    final LocalDate expected = LocalDate.of(2017, 1, 1);
-
-    final Date dbDate = converter.convertToDatabaseColumn(expected);
-
-    final LocalDate result = converter.convertToEntityAttribute(dbDate);
-
-    Assert.assertEquals(expected, result);
+  public Flyway create(final DataSource dataSource) {
+    final Flyway flyway = new Flyway();
+    flyway.setDataSource(dataSource);
+    flyway.setLocations("db/migrations/mariadb");
+    flyway.setTable(this.applicationName.getServiceName() + "_schema_version");
+    flyway.setBaselineOnMigrate(true);
+    flyway.setBaselineVersionAsString("0");
+    return flyway;
   }
 }

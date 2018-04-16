@@ -16,29 +16,37 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package io.mifos.core.mariadb.domain;
+package org.apache.fineract.cn.mariadb.util;
 
-import io.mifos.core.lang.ApplicationName;
-import org.flywaydb.core.Flyway;
 
-import javax.sql.DataSource;
+import javax.persistence.AttributeConverter;
+import javax.persistence.Converter;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
+import org.apache.fineract.cn.lang.DateConverter;
 
-public class FlywayFactoryBean {
+@Converter
+public class LocalDateTimeConverter implements AttributeConverter<LocalDateTime, Timestamp> {
 
-  private final ApplicationName applicationName;
-
-  public FlywayFactoryBean(final ApplicationName applicationName) {
+  public LocalDateTimeConverter() {
     super();
-    this.applicationName = applicationName;
   }
 
-  public Flyway create(final DataSource dataSource) {
-    final Flyway flyway = new Flyway();
-    flyway.setDataSource(dataSource);
-    flyway.setLocations("db/migrations/mariadb");
-    flyway.setTable(this.applicationName.getServiceName() + "_schema_version");
-    flyway.setBaselineOnMigrate(true);
-    flyway.setBaselineVersionAsString("0");
-    return flyway;
+  @Override
+  public Timestamp convertToDatabaseColumn(final LocalDateTime attribute) {
+    if (attribute == null) {
+      return null;
+    } else {
+      return new Timestamp(DateConverter.toEpochMillis(attribute));
+    }
+  }
+
+  @Override
+  public LocalDateTime convertToEntityAttribute(final Timestamp dbData) {
+    if (dbData == null) {
+      return null;
+    } else {
+      return DateConverter.fromEpochMillis(dbData.getTime());
+    }
   }
 }

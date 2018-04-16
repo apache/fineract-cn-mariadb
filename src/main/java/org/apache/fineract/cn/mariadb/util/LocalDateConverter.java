@@ -16,37 +16,35 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package io.mifos.core.mariadb.util;
-
-import io.mifos.core.lang.DateConverter;
+package org.apache.fineract.cn.mariadb.util;
 
 import javax.persistence.AttributeConverter;
 import javax.persistence.Converter;
-import java.sql.Timestamp;
-import java.time.LocalDateTime;
+import java.sql.Date;
+import java.time.LocalDate;
 
 @Converter
-public class LocalDateTimeConverter implements AttributeConverter<LocalDateTime, Timestamp> {
+public class LocalDateConverter implements AttributeConverter<LocalDate, Date> {
 
-  public LocalDateTimeConverter() {
+  public LocalDateConverter() {
     super();
   }
 
   @Override
-  public Timestamp convertToDatabaseColumn(final LocalDateTime attribute) {
+  public Date convertToDatabaseColumn(final LocalDate attribute) {
     if (attribute == null) {
       return null;
     } else {
-      return new Timestamp(DateConverter.toEpochMillis(attribute));
+      return Date.valueOf(attribute);
     }
   }
 
   @Override
-  public LocalDateTime convertToEntityAttribute(final Timestamp dbData) {
+  public LocalDate convertToEntityAttribute(final Date dbData) {
     if (dbData == null) {
       return null;
     } else {
-      return DateConverter.fromEpochMillis(dbData.getTime());
+      return dbData.toLocalDate();
     }
   }
 }

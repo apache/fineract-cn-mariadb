@@ -16,12 +16,13 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package io.mifos.core.mariadb.domain;
+package org.apache.fineract.cn.mariadb.domain;
 
 import com.jolbox.bonecp.BoneCPDataSource;
-import io.mifos.core.lang.TenantContextHolder;
-import io.mifos.core.mariadb.util.JdbcUrlBuilder;
-import io.mifos.core.mariadb.util.MariaDBConstants;
+import org.apache.fineract.cn.mariadb.util.JdbcUrlBuilder;
+import org.apache.fineract.cn.mariadb.util.MariaDBConstants;
+import org.apache.fineract.cn.lang.TenantContextHolder;
+import org.apache.fineract.cn.mariadb.util.JdbcUrlBuilder.DatabaseType;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.datasource.lookup.AbstractRoutingDataSource;
@@ -36,12 +37,12 @@ import java.util.concurrent.ConcurrentHashMap;
 public final class ContextAwareRoutingDataSource extends AbstractRoutingDataSource {
 
   private final Logger logger;
-  private final JdbcUrlBuilder.DatabaseType type;
+  private final DatabaseType type;
   private final ConcurrentHashMap<String, DataSource> dynamicDataSources;
   private DataSource metaDataSource;
 
   public ContextAwareRoutingDataSource(@Qualifier(MariaDBConstants.LOGGER_NAME) final Logger logger,
-                                       final JdbcUrlBuilder.DatabaseType type) {
+                                       final DatabaseType type) {
     super();
     this.logger = logger;
     this.type = type;

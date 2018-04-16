@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package io.mifos.core.mariadb.config;
+package org.apache.fineract.cn.mariadb.config;
 
 
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;

@@ -16,11 +16,11 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package io.mifos.core.mariadb.config;
+package org.apache.fineract.cn.mariadb.config;
 
-import io.mifos.core.mariadb.domain.ContextAwareRoutingDataSource;
-import io.mifos.core.mariadb.util.JdbcUrlBuilder;
-import io.mifos.core.mariadb.util.MariaDBConstants;
+import org.apache.fineract.cn.mariadb.domain.ContextAwareRoutingDataSource;
+import org.apache.fineract.cn.mariadb.util.JdbcUrlBuilder;
+import org.apache.fineract.cn.mariadb.util.MariaDBConstants;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
