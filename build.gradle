@@ -34,7 +34,8 @@ ext.versions = [
         springcontext        : '4.3.3.RELEASE',
         springboot           : '1.4.1.RELEASE',
         findbugs             : '3.0.1',
-        frameworklang        : '0.1.0-BUILD-SNAPSHOT'
+        frameworklang        : '0.1.0-BUILD-SNAPSHOT',
+        eclipselink          : '2.7.4'
 ]
 
 apply plugin: 'java'
@@ -59,9 +60,9 @@ dependencies {
             [group: 'org.springframework', name: 'spring-context', version: versions.springcontext],
             [group: 'com.google.code.findbugs', name: 'jsr305', version: versions.findbugs],
             [group: 'org.apache.fineract.cn', name: 'lang', version: versions.frameworklang],
-            [group: 'org.springframework.boot', name: 'spring-boot-starter-data-jpa', version: versions.springboot],
             [group: 'com.jolbox', name: 'bonecp', version: '0.8.0.RELEASE'],
-            [group: 'org.flywaydb', name: 'flyway-core', version: '4.0.1']
+            [group: 'org.flywaydb', name: 'flyway-core', version: '4.0.1'],
+            [group: 'org.eclipse.persistence', name: 'org.eclipse.persistence.jpa', version: versions.eclipselink]
     )
 
     //Workaround for bug described here: https://discuss.gradle.org/t/build-failure-when-4-1-0-of-net-java-dev-jna-jna-is-selected-in-place-of-3-3-0-due-to-change-in-artifacts-with-classifiers/9377/3
@@ -70,6 +71,11 @@ dependencies {
     compile('org.mariadb.jdbc:mariadb-java-client:1.4.3') {
         exclude group: 'net.java.dev.jna'
     }
+    compile(group: 'org.springframework.boot', name: 'spring-boot-starter-data-jpa', version: versions.springboot)
+            {
+                exclude group: 'org.hibernate', module: 'hibernate-entitymanager'
+                exclude group: 'org.hibernate', module: 'hibernate-core'
+            }
 
     compile 'net.java.dev.jna:jna:4.1.0'
     compile 'net.java.dev.jna:jna-platform:4.1.0'

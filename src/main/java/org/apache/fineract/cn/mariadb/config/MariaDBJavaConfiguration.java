@@ -31,6 +31,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 import org.springframework.core.env.Environment;
 import org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor;
 import org.springframework.orm.jpa.JpaTransactionManager;
@@ -47,8 +48,8 @@ import java.util.Properties;
 @SuppressWarnings("WeakerAccess")
 @Configuration
 @ConditionalOnProperty(prefix = "mariadb", name = "enabled", matchIfMissing = true)
-@EnableTransactionManagement
 @EnableApplicationName
+@Import(EclipseLinkJpaConfiguration.class)
 public class MariaDBJavaConfiguration {
 
   private final Environment env;
@@ -62,32 +63,6 @@ public class MariaDBJavaConfiguration {
   @Bean(name = MariaDBConstants.LOGGER_NAME)
   public Logger logger() {
     return LoggerFactory.getLogger(MariaDBConstants.LOGGER_NAME);
-  }
-
-  @Bean
-  public LocalContainerEntityManagerFactoryBean entityManagerFactory(final DataSource dataSource) {
-    final LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
-    em.setPersistenceUnitName("metaPU");
-    em.setDataSource(dataSource);
-    em.setPackagesToScan("org.apache.fineract.cn.**.repository");
-
-    final JpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
-    em.setJpaVendorAdapter(vendorAdapter);
-    em.setJpaProperties(additionalProperties());
-
-    return em;
-  }
-
-  @Bean
-  public PlatformTransactionManager transactionManager(EntityManagerFactory emf) {
-    final JpaTransactionManager transactionManager = new JpaTransactionManager();
-    transactionManager.setEntityManagerFactory(emf);
-    return transactionManager;
-  }
-
-  @Bean
-  public PersistenceExceptionTranslationPostProcessor exceptionTranslation() {
-    return new PersistenceExceptionTranslationPostProcessor();
   }
 
   @Bean
@@ -130,11 +105,5 @@ public class MariaDBJavaConfiguration {
     driverProperties.setProperty("useServerPrepStmts", "false");
     boneCPDataSource.setDriverProperties(driverProperties);
     return new MetaDataSourceWrapper(boneCPDataSource);
-  }
-
-  private Properties additionalProperties() {
-    final Properties properties = new Properties();
-    properties.setProperty("hibernate.dialect", "org.hibernate.dialect.MySQLDialect");
-    return properties;
   }
 }
