@@ -1,4 +1,6 @@
-# Apache Fineract CN MariaDB [![Build Status](https://api.travis-ci.com/apache/fineract-cn-mariadb.svg?branch=develop)](https://travis-ci.com/apache/fineract-cn-mariadb)
+**THIS REPO (apache/fineract-cn-mariadb) IS ARCHIVED, PLEASE USE & CONTRIBUTE TO [apache/fineract-cn-postgresql](https://github.com/apache/fineract-cn-postgresql) INSTEAD.**
+
+# Apache Fineract CN MariaDB
 
 ## Abstract
 Apache Fineract CN is an application framework for digital financial services, a system to support nationwide and cross-national financial transactions and help to level and speed the creation of an inclusive, interconnected digital economy for every nation in the world.
